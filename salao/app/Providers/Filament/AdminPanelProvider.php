@@ -27,29 +27,36 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('Salão & Beleza')
+            ->brandLogo(asset('imagens/logo.png')) 
+            ->brandLogoHeight('2.5rem') 
+            ->topNavigation()
             
-            // --- CONFIGURAÇÕES DE ESTILO PARA UM VISUAL SOFISTICADO (DARK ONLY) ---
             
-            // Força o modo escuro permanentemente e remove o botão de alternância
             ->darkMode(true, isForced: true) 
             
-            // Paleta de cores refinada para fundo escuro
+           
+            ->maxContentWidth('full') 
+
             ->colors([
-                // Um rosa vibrante mas elegante para destacar ações (Primary)
-                'primary' => Color::hex('#ec4899'), 
-                
-                // Tons de cinza azulado para o fundo e bordas (Neutral)
-                // O Slate 950 é quase preto, muito sofisticado no Dark Mode
-                'gray' => Color::Slate, 
-                
+                'primary' => Color::hex('#ec4899'), // Rosa elegante
+                'gray' => [
+                    50 => '#f8fafc',
+                    100 => '#f1f5f9',
+                    200 => '#e2e8f0',
+                    300 => '#cbd5e1',
+                    400 => '#94a3b8',
+                    500 => '#64748b',
+                    600 => '#475569',
+                    700 => '#334155',
+                    800 => '#1e293b',
+                    900 => '#0f172a',
+                    950 => '#050505', // <-- Este é o fundo principal da tela (Preto absoluto quase fosco)
+                ], 
                 'danger' => Color::Red,
                 'info' => Color::Blue,
                 'success' => Color::Green,
                 'warning' => Color::Amber,
             ])
-            
-            // --------------------------------------------------------------------
             
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -58,8 +65,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class, // Removido para visual mais limpo
+                // Widgets\AccountWidget::class, // Removido para manter a interface limpa
             ])
             ->middleware([
                 EncryptCookies::class,

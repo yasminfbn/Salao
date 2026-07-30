@@ -13,39 +13,57 @@ use Filament\Tables\Table;
 class ServicosResource extends Resource
 {
     protected static ?string $model = Servicos::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-scissors';
+    
+    protected static ?string $navigationGroup = 'Cadastros';
+    
+    protected static ?string $navigationIcon = 'heroicon-o-paint-brush';
 
     protected static ?string $navigationLabel = 'Serviços';
+
+    protected static ?string $modelLabel = 'Serviço';
+
+    protected static ?string $pluralModelLabel = 'Serviços';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Dados do Serviço')
+                Forms\Components\Section::make('Informações do Serviço')
+                    ->description('Cadastre os detalhes, preço e tempo de duração do procedimento.')
                     ->schema([
                         Forms\Components\TextInput::make('nome')
                             ->label('Nome do Serviço')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->autofocus()
+                            ->columnSpan(['default' => 12, 'md' => 8]),
+
+                        Forms\Components\Toggle::make('ativo')
+                            ->label('Serviço Ativo')
+                            ->default(true)
+                            ->inline(false)
+                            ->columnSpan(['default' => 12, 'md' => 4]),
 
                         Forms\Components\TextInput::make('preco')
                             ->label('Preço')
                             ->numeric()
                             ->prefix('R$')
-                            ->required(),
+                            ->required()
+                            ->columnSpan(['default' => 12, 'md' => 6]),
 
                         Forms\Components\TextInput::make('duracao')
-                            ->label('Duração (min)')
+                            ->label('Duração (minutos)')
                             ->numeric()
-                            ->required(),
+                            ->suffix('min')
+                            ->required()
+                            ->columnSpan(['default' => 12, 'md' => 6]),
 
                         Forms\Components\Textarea::make('descricao')
                             ->label('Descrição')
-                            ->rows(4)
+                            ->rows(3)
                             ->columnSpanFull(),
                     ])
-                    ->columns(2),
+                    ->columns(12),
             ]);
     }
 
@@ -56,26 +74,39 @@ class ServicosResource extends Resource
                 Tables\Columns\TextColumn::make('nome')
                     ->label('Serviço')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('preco')
                     ->label('Preço')
                     ->money('BRL')
-                    ->sortable(),
+                    ->sortable()
+                    ->color('success'),
 
                 Tables\Columns\TextColumn::make('duracao')
                     ->label('Duração')
                     ->suffix(' min')
                     ->sortable(),
 
+                Tables\Columns\IconColumn::make('ativo')
+                    ->label('Status')
+                    ->boolean()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Criado em')
                     ->dateTime('d/m/Y H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('nome')
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('ativo')
+                    ->label('Status do Serviço')
+                    ->boolean()
+                    ->trueLabel('Apenas Ativos')
+                    ->falseLabel('Apenas Inativos')
+                    ->native(false),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

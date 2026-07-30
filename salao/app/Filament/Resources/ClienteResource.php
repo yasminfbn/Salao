@@ -14,6 +14,9 @@ class ClienteResource extends Resource
 {
     protected static ?string $model = Cliente::class;
 
+    // Grupo no menu lateral
+    protected static ?string $navigationGroup = 'Cadastros';
+
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationLabel = 'Clientes';

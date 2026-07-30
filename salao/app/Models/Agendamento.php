@@ -13,6 +13,7 @@ class Agendamento extends Model
         'data',
         'hora',
         'observacao',
+        'servico'
     ];
 
     public function cliente()

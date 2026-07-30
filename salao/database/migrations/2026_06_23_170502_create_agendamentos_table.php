@@ -22,6 +22,13 @@ return new class extends Migration
 
             $table->text('observacao')->nullable();
 
+            $table->string('servico') -> unique();
+
+            $table->foreign('servico')
+                ->references('nome')
+                ->on('servicos')
+                ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

@@ -14,6 +14,9 @@ class AgendamentoResource extends Resource
 {
     protected static ?string $model = Agendamento::class;
 
+    // Grupo no menu lateral
+    protected static ?string $navigationGroup = 'Atendimento';
+
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     protected static ?string $navigationLabel = 'Agendamentos';
@@ -26,6 +29,13 @@ class AgendamentoResource extends Resource
                 Forms\Components\Select::make('cliente_id')
                     ->label('Cliente')
                     ->relationship('cliente', 'nome')
+                    ->searchable()
+                    ->required(),
+
+                // Select para escolher o serviço baseado na coluna 'nome' da tabela 'servicos'
+                Forms\Components\Select::make('servico')
+                    ->label('Serviço')
+                    ->relationship('servicoRelacao', 'nome') // Certifique-se de que a relação no Model se chama servicoRelacao, ou ajuste para o nome da função correta
                     ->searchable()
                     ->required(),
 
@@ -57,6 +67,11 @@ class AgendamentoResource extends Resource
 
                 Tables\Columns\TextColumn::make('cliente.nome')
                     ->label('Cliente')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('servico')
+                    ->label('Serviço')
                     ->searchable()
                     ->sortable(),
 
