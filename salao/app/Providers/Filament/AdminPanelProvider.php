@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Support\Facades\Blade; // <-- Adicione esta linha no topo junto com os imports
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,16 +28,12 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandLogo(asset('imagens/logo.png')) 
-            ->brandLogoHeight('2.5rem') 
+            ->brandLogo(asset('imagens/logo.png'))
+            ->brandLogoHeight('4.0rem') 
+            ->favicon(asset('imagens/logo.png'))
             ->topNavigation()
-            
-            
             ->darkMode(true, isForced: true) 
-            
-           
             ->maxContentWidth('full') 
-
             ->colors([
                 'primary' => Color::hex('#ec4899'), // Rosa elegante
                 'gray' => [
@@ -50,14 +47,13 @@ class AdminPanelProvider extends PanelProvider
                     700 => '#334155',
                     800 => '#1e293b',
                     900 => '#0f172a',
-                    950 => '#050505', // <-- Este é o fundo principal da tela (Preto absoluto quase fosco)
+                    950 => '#0f172a', 
                 ], 
                 'danger' => Color::Red,
                 'info' => Color::Blue,
                 'success' => Color::Green,
                 'warning' => Color::Amber,
             ])
-            
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -65,7 +61,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                // Widgets\AccountWidget::class, // Removido para manter a interface limpa
+                // Widgets\AccountWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

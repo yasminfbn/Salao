@@ -15,11 +15,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Cria o usuário de teste padrão do Laravel
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('123456'), // Altere 'password' para a senha que você preferir
+        ]);
+
+        // Chama os seeders do sistema do salão
+        $this->call([
+            SalaoSeeder::class,
+            ClienteSeeder::class,
+            AgendamentoSeeder::class
         ]);
     }
 }

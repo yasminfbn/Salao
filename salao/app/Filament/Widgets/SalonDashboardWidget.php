@@ -11,7 +11,10 @@ class SalonDashboardWidget extends Widget
 {
     protected static string $view = 'filament.widgets.salon-dashboard-widget';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = [
+        'md' => 1,
+        'xl' => 1,
+    ];
 
     // Variável para controlar o ano e mês atual exibidos no calendário
     public ?int $year = null;

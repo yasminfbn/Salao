@@ -14,15 +14,10 @@ class ClienteResource extends Resource
 {
     protected static ?string $model = Cliente::class;
 
-    // Grupo no menu lateral
     protected static ?string $navigationGroup = 'Cadastros';
-
     protected static ?string $navigationIcon = 'heroicon-o-users';
-
     protected static ?string $navigationLabel = 'Clientes';
-
     protected static ?string $modelLabel = 'Cliente';
-
     protected static ?string $pluralModelLabel = 'Clientes';
 
     public static function form(Form $form): Form
@@ -31,7 +26,6 @@ class ClienteResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Dados do Cliente')
                     ->schema([
-
                         Forms\Components\TextInput::make('nome')
                             ->label('Nome')
                             ->required()
@@ -50,6 +44,12 @@ class ClienteResource extends Resource
                             ->email()
                             ->maxLength(255),
 
+                        // Campo para gerenciar os pontos manualmente se necessário
+                        Forms\Components\TextInput::make('pontos')
+                            ->label('Pontos de Fidelidade')
+                            ->numeric()
+                            ->default(0)
+                            ->required(),
                     ])
                     ->columns(2),
             ]);
@@ -59,7 +59,6 @@ class ClienteResource extends Resource
     {
         return $table
             ->columns([
-
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
@@ -77,11 +76,23 @@ class ClienteResource extends Resource
                     ->label('E-mail')
                     ->searchable(),
 
+                // Coluna de Pontos
+                Tables\Columns\TextColumn::make('pontos')
+                    ->label('Pontos')
+                    ->numeric()
+                    ->sortable(),
+
+                // Coluna Visual de Gamificação (Medalhas)
+                Tables\Columns\TextColumn::make('nivel_fidelidade.nome')
+                    ->label('Nível')
+                    ->badge()
+                    ->icon(fn ($record) => $record->nivel_fidelidade['icon'])
+                    ->color(fn ($record) => $record->nivel_fidelidade['color']),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Cadastro')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
-
             ])
             ->defaultSort('nome')
             ->filters([

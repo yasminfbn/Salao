@@ -35,8 +35,20 @@ class AgendamentoResource extends Resource
                 // Select para escolher o serviço baseado na coluna 'nome' da tabela 'servicos'
                 Forms\Components\Select::make('servico')
                     ->label('Serviço')
-                    ->relationship('servicoRelacao', 'nome') // Certifique-se de que a relação no Model se chama servicoRelacao, ou ajuste para o nome da função correta
+                    ->relationship('servicoRelacao', 'nome')
                     ->searchable()
+                    ->required(),
+
+                // Select para o Status do Agendamento
+                Forms\Components\Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'pendente' => 'Pendente',
+                        'confirmado' => 'Confirmado',
+                        'concluido' => 'Concluído',
+                        'cancelado' => 'Cancelado',
+                    ])
+                    ->default('pendente')
                     ->required(),
 
                 Forms\Components\DatePicker::make('data')
@@ -73,6 +85,20 @@ class AgendamentoResource extends Resource
                 Tables\Columns\TextColumn::make('servico')
                     ->label('Serviço')
                     ->searchable()
+                    ->sortable(),
+
+                // Coluna de Status com Badge colorido
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pendente' => 'warning',
+                        'confirmado' => 'info',
+                        'concluido' => 'success',
+                        'cancelado' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('data')

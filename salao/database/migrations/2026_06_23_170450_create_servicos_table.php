@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('servicos', function (Blueprint $table) {
             $table->id();
 
-            $table->string('nome') -> unique();
+            $table->string('nome') -> index();
             $table->decimal('preco', 10, 2);
             $table->integer('duracao');
             $table->text('descricao')->nullable();

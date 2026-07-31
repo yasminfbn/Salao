@@ -13,7 +13,8 @@ class Agendamento extends Model
         'data',
         'hora',
         'observacao',
-        'servico'
+        'servico',
+        'status'
     ];
 
     public function cliente()
@@ -29,5 +30,10 @@ class Agendamento extends Model
                 'COD-' . strtoupper(substr(md5(uniqid()), 0, 8));
 
         });
+    }
+
+    public function servicoRelacao()
+    {
+        return $this->belongsTo(Servicos::class, 'servico', 'nome');
     }
 }
